@@ -35,6 +35,7 @@ Cross-validation is the **performance-estimation stage**. The final model is tra
 - random K-fold, source-grouped K-fold, and contiguous block folds
 - optional boundary-frame purging for block validation
 - U-Net++ and DeepLabV3+ baselines from `segmentation_models_pytorch`
+- the original in-house `UNetBinary` architecture used in the paper
 - shared BCE + Dice loss and Dice/IoU evaluation
 - cross-validation summaries and learning-curve plots
 - connected-component filtering and stateful ROI tracking
@@ -42,21 +43,25 @@ Cross-validation is the **performance-estimation stage**. The final model is tra
 - temporal descriptors: blood area, ROI occupancy, `dA/dt`, frame-to-frame area change, temporal IoU, mean/p95 flow magnitude, and directional consistency
 - a data-free synthetic descriptor smoke demo and focused unit tests
 
-## Explicit research dependency
+## In-house binary U-Net
 
-The uploaded research scripts import `src.models.unet.UNetBinary`, but that source file was not part of the supplied code. The accessible owned repositories were checked: they contain either a different `SegModel`, a multiclass public U-Net demo, or no implementation. This repository therefore **does not invent or silently replace Klaudia's model**.
+The repository includes the original `UNetBinary` architecture used by the research scripts and described in the paper. It is implemented from scratch in PyTorch with four encoder–decoder levels, BatchNorm, transposed-convolution upsampling, skip connections, a 1024-channel bottleneck for `base_ch=64`, and deeper-block `Dropout2d`.
 
-The SMP cross-validation workflow is fully runnable. The final-model and video scripts intentionally stop with an explanatory error until the original owned implementation is supplied at `src/models/unet.py`, or another exact import is passed as:
+The public training configuration is recorded in `configs/paper_experiment.yaml`. Trained weights are intentionally not distributed.
 
-```text
---model-import package.module:UNetBinary
-```
+## Published segmentation results
 
-Expected constructor compatibility, based on the original calling code:
+These are the aggregate five-fold cross-validation results reported in the associated paper. They document the research experiments; they are not recomputed from private data by this public repository.
 
-```python
-UNetBinary(base_ch=64, dropout=0.1, use_batchnorm=True, upsample_mode="transpose")
-```
+| Experiment | Dice | IoU |
+|---|---:|---:|
+| Proposed U-Net — simulated | 0.915 ± 0.012 | 0.851 ± 0.019 |
+| Proposed U-Net — internal operative | 0.856 ± 0.013 | 0.756 ± 0.025 |
+| Proposed U-Net — external GynSurg | 0.707 ± 0.053 | 0.570 ± 0.056 |
+| U-Net++ — internal operative | 0.856 ± 0.014 | 0.752 ± 0.022 |
+| DeepLabV3+ — internal operative | 0.836 ± 0.009 | 0.727 ± 0.018 |
+
+Machine-readable values with full precision are provided in `artifacts/published_results/segmentation_cv.csv`. Standard deviations use the sample definition (`ddof=1`).
 
 ## Installation
 
@@ -150,7 +155,7 @@ Fold dispersion is reported consistently as **sample standard deviation (`ddof=1
 
 ### 5. Fit the final descriptor model
 
-After adding the verified owned `UNetBinary` implementation:
+The final descriptor model can be fitted with the included `UNetBinary` implementation:
 
 ```bash
 python scripts/03c_train_final_unet_for_descriptors.py \
@@ -190,6 +195,7 @@ src/surgical_bleeding/
   losses.py            BCE + Dice objective
   metrics.py           Dice, IoU, consistent CV statistics
   models.py            SMP factory and verified-model loader
+  unet.py              original in-house binary U-Net
   reproducibility.py   seeding and run metadata
   splits.py            random/group/block split logic
   temporal.py          masks, ROI tracking, ECC, flow, descriptors
@@ -197,6 +203,7 @@ src/surgical_bleeding/
 scripts/               numbered research workflow entry points
 examples/              synthetic, data-free smoke demo
 configs/               public-safe manifest example
+artifacts/             aggregate results published in the paper
 tests/                 metrics, leakage, ROI, and descriptor tests
 ```
 
