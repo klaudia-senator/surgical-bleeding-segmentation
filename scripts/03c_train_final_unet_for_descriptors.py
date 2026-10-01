@@ -21,9 +21,9 @@ def main() -> None:
     source.add_argument("--pairs-csv", type=Path)
     source.add_argument("--images-dir", type=Path)
     parser.add_argument("--masks-dir", type=Path); parser.add_argument("--out-dir", type=Path, required=True)
-    parser.add_argument("--model-import", default="src.models.unet:UNetBinary")
+    parser.add_argument("--model-import", default="surgical_bleeding.unet:UNetBinary")
     parser.add_argument("--img-size", type=int, default=512); parser.add_argument("--epochs", type=int, default=30)
-    parser.add_argument("--batch-size", type=int, default=1); parser.add_argument("--lr", type=float, default=1e-4)
+    parser.add_argument("--batch-size", type=int, default=2); parser.add_argument("--lr", type=float, default=1e-4)
     parser.add_argument("--dropout", type=float, default=0.1); parser.add_argument("--threshold", type=float, default=0.5)
     parser.add_argument("--seed", type=int, default=42); parser.add_argument("--num-workers", type=int, default=0)
     parser.add_argument("--amp", action="store_true"); parser.add_argument("--deterministic", action="store_true")
@@ -56,4 +56,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
