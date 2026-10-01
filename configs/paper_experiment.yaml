@@ -1,0 +1,23 @@
+# Public configuration corresponding to the final all-data descriptor model.
+model:
+  class: surgical_bleeding.unet:UNetBinary
+  base_channels: 64
+  dropout: 0.1
+  use_batchnorm: true
+  upsample_mode: transpose
+
+training:
+  image_size: 512
+  epochs: 30
+  batch_size: 2
+  learning_rate: 0.0001
+  weight_decay: 0.01
+  probability_threshold: 0.5
+  seed: 42
+  mixed_precision: true
+  selected_pairs: 548
+
+interpretation:
+  performance_estimation: five-fold cross-validation
+  final_model_purpose: downstream temporal descriptor extraction
+  final_training_metrics: descriptive fit only; not an independent generalization estimate
