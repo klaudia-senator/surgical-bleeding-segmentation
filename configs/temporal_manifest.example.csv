@@ -1,0 +1,3 @@
+case_id,domain,video_path,case_label
+public_demo_01,public-demo,/path/to/public_or_synthetic_video.mp4,example temporal sequence
+

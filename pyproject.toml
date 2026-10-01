@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "surgical-bleeding-segmentation"
+version = "0.1.0"
+description = "Public research workflow for surgical bleeding segmentation and temporal characterization"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{name = "Klaudia Senator"}]
+dependencies = [
+  "numpy>=1.24",
+  "pandas>=2.0",
+  "Pillow>=10.0",
+  "matplotlib>=3.7",
+  "scikit-learn>=1.3",
+  "torch>=2.1",
+  "torchvision>=0.16",
+]
+
+[project.optional-dependencies]
+baseline = ["segmentation-models-pytorch>=0.3.3"]
+temporal = ["opencv-python>=4.8"]
+dev = ["pytest>=8.0", "ruff>=0.6"]
+all = ["segmentation-models-pytorch>=0.3.3", "opencv-python>=4.8", "pytest>=8.0", "ruff>=0.6"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 140
+target-version = "py310"
+
