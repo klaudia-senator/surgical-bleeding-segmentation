@@ -13,16 +13,11 @@ def make_smp_model(name: str, encoder: str):
     raise ValueError("Model must be unetplusplus or deeplabv3plus")
 
 
-def load_owned_unet_class(import_path: str = "src.models.unet:UNetBinary"):
-    """Load Klaudia's original model without inventing a replacement implementation."""
+def load_owned_unet_class(import_path: str = "surgical_bleeding.unet:UNetBinary"):
+    """Load the in-house binary U-Net or another explicitly requested compatible class."""
     module_name, class_name = import_path.split(":", 1)
     try:
         module = importlib.import_module(module_name)
         return getattr(module, class_name)
     except (ImportError, AttributeError) as exc:
-        raise RuntimeError(
-            "The original UNetBinary source is not distributed in this public repository. "
-            "Provide the owned src/models/unet.py implementation and use --model-import "
-            "src.models.unet:UNetBinary. The SMP cross-validation workflow is fully runnable without it."
-        ) from exc
-
+        raise RuntimeError(f"Could not import model class {import_path!r}") from exc
