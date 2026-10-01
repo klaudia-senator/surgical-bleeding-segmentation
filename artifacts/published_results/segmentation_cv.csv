@@ -1,0 +1,6 @@
+experiment,dataset,model,encoder,n_folds,dice_mean,dice_sample_sd,iou_mean,iou_sample_sd
+proposed-simulated,simulated,UNetBinary,in-house,5,0.9146900316,0.0120505299,0.8513514666,0.0185611806
+proposed-internal,internal-operative,UNetBinary,in-house,5,0.8562441411,0.0128618352,0.7563864836,0.0245938155
+proposed-external,external-GynSurg,UNetBinary,in-house,5,0.7067951298,0.0530820111,0.5699883039,0.0559572860
+baseline-internal-unetplusplus,internal-operative,U-Net++,resnet34,5,0.8560258160,0.0142750594,0.7523605684,0.0217209736
+baseline-internal-deeplabv3plus,internal-operative,DeepLabV3+,resnet34,5,0.8359603612,0.0093545999,0.7268284016,0.0183356578
