@@ -87,7 +87,7 @@ def process_case(model, video: Path, output: Path, case_id: str, domain: str, la
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Extract temporal bleeding descriptors from video.")
-    parser.add_argument("--model-path", type=Path, required=True); parser.add_argument("--model-import", default="src.models.unet:UNetBinary")
+    parser.add_argument("--model-path", type=Path, required=True); parser.add_argument("--model-import", default="surgical_bleeding.unet:UNetBinary")
     source = parser.add_mutually_exclusive_group(required=True); source.add_argument("--video-path", type=Path); source.add_argument("--manifest", type=Path)
     parser.add_argument("--case-id"); parser.add_argument("--domain", default="unknown"); parser.add_argument("--case-label", default="temporal sequence")
     parser.add_argument("--out-root", type=Path, default=Path("results/temporal_descriptors")); parser.add_argument("--img-size", type=int, default=512)
@@ -107,4 +107,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
